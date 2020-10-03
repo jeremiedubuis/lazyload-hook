@@ -4,7 +4,7 @@ import { RefObject, useEffect, useState } from 'react';
 export const useLazyLoad = (
     intersectionObserverConfig?: intersectionObserverOptions,
     onLazyLoad?: Function
-): [RefObject<HTMLElement>, boolean] => {
+): [RefObject<any>, boolean] => {
     const [ref, isIntersecting, unobserve] = useIntersectionObserver(intersectionObserverConfig);
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -48,6 +48,9 @@ export const useLazyLoad = (
                     ref.current.setAttribute('src', src);
                     ref.current.removeAttribute('data-src');
                 }
+            } else if (typeof onLazyLoad === 'function') {
+                setIsLoaded(true);
+                onLazyLoad();
             }
         }
     }, [isLoaded, isIntersecting]);

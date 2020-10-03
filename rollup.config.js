@@ -5,32 +5,27 @@ import pkg from './package.json';
 import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
-import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 
 const dev = process.argv.indexOf('-w') > -1;
 
-
-const plugins = [
-    resolve(),
-    typescript(),
-    commonjs()
-];
+const plugins = [typescript(), commonjs(), resolve()];
 
 if (!dev) {
     plugins.unshift(peerDepsExternal());
     plugins.push(terser());
 } else {
     plugins.push(
-        replace(({
+        replace({
             'process.env.NODE_ENV': JSON.stringify(dev ? 'development' : 'production')
-        })),
+        }),
         babel({
-            "exclude": "node_modules/**",
-            "presets": ["@babel/env", "@babel/preset-react"]
+            exclude: 'node_modules/**',
+            presets: ['@babel/env', '@babel/preset-react']
         }),
         serve(['dist', 'public'])
-    )
+    );
 }
 
 const lib = {
@@ -49,14 +44,12 @@ const lib = {
 };
 
 const exampleClient = {
-    input: 'example/index.jsx',
+    input: 'example/index.tsx',
     output: {
         file: 'public/index.js',
         format: 'iife'
     },
-    plugins: [
-        ...plugins
-    ],
+    plugins,
     watch: {
         exclude: 'node_modules/**'
     }

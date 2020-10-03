@@ -41,7 +41,7 @@ export const useIntersectionObserver = ({
     rootMargin = '0px',
     threshold = 0.0
 }: intersectionObserverOptions = {}): [RefObject<HTMLElement>, boolean, Function] => {
-    const ref = useRef<HTMLElement>(null);
+    const ref = useRef<any>(null);
     const observer = useRef<IntersectionObserver | null>(null);
     const unregister = useRef<Function | null>(null);
     const [isIntersecting, setIsIntersecting] = useState(false);

@@ -1,8 +1,7 @@
 import React from 'react';
-import { useLazyLoad } from "../lib";
+import { useLazyLoad } from '../lib';
 
 export const Picture = ({ src }) => {
-    let ref = null;
-    [ref] = useLazyLoad({ rootMargin: "200px"});
-    return <img ref={ref} data-src={src} alt="" />
-}
+    let [ref] = useLazyLoad({ rootMargin: '200px' });
+    return <img ref={ref} data-src={src} alt="" />;
+};
