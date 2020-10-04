@@ -6,10 +6,11 @@ export const useLazyLoad = (
     onLazyLoad?: Function
 ): [RefObject<any>, boolean] => {
     const [ref, isIntersecting, unobserve] = useIntersectionObserver(intersectionObserverConfig);
+    const [swappedSources, setSwappedSources] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        if (!ref.current) return;
+        if (!ref.current || !swappedSources) return;
         let img: HTMLImageElement | null = null;
         if (ref.current.tagName.toLowerCase() === 'picture')
             img = ref.current.getElementsByTagName('img')[0];
@@ -20,9 +21,10 @@ export const useLazyLoad = (
                 setIsLoaded(true);
                 if (typeof onLazyLoad === 'function') onLazyLoad();
             };
-            img.addEventListener('load', onLoad);
+            if (img.complete) onLoad();
+            else img.addEventListener('load', onLoad);
         }
-    }, []);
+    }, [swappedSources]);
 
     useEffect(() => {
         if (isLoaded || !ref.current) return;
@@ -42,11 +44,13 @@ export const useLazyLoad = (
                         source.removeAttribute('data-src');
                     }
                 });
+                setSwappedSources(true);
             } else if (ref.current.tagName.toLowerCase() === 'img') {
                 const src = ref.current.getAttribute('data-src');
                 if (src) {
                     ref.current.setAttribute('src', src);
                     ref.current.removeAttribute('data-src');
+                    setSwappedSources(true);
                 }
             } else if (typeof onLazyLoad === 'function') {
                 setIsLoaded(true);
