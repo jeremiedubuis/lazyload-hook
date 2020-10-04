@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
+import type { ReactNode } from 'react';
 import { useLazyLoad } from './useLazyLoad';
 import type { intersectionObserverOptions } from './useIntersectionObserver';
 
-export const LazyLoad = (
-    children,
-    intersectionObserverConfig?: intersectionObserverOptions,
+export type LazyLoadProps = {
+    children: ReactNode,
+    options?:intersectionObserverOptions,
     onLazyLoad?: Function
-) => {
+}
+
+export const LazyLoad: React.FC<LazyLoadProps> = ({
+    children,
+    options,
+    onLazyLoad
+}) => {
     const [display, setDisplay] = useState(false);
-    const [ref] = useLazyLoad(intersectionObserverConfig, () => {
+    const [ref] = useLazyLoad(options, () => {
         setDisplay(true);
         if (typeof onLazyLoad === 'function') onLazyLoad();
     });

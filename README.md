@@ -49,3 +49,21 @@ const Example = () => {
   )
 }
 ```
+
+## Using the LazyLoad compoennt
+
+```
+import React from "react";
+import { LazyLoad } from 'lazyload-hook';
+import Component from './Component';
+
+const options = {
+  root: null,
+  rootMargin: "0px",
+  thresholds: [0.0],
+};
+const Example = () => 
+    <LazyLoad options={options}>
+        <Component />
+    </LazyLoad>
+```
