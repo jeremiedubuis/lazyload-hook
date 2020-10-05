@@ -67,3 +67,7 @@ const Example = () =>
         <Component />
     </LazyLoad>
 ```
+
+## Caveats
+
+When using this hook for a dynamically updating component be sure to give unique IDs to lazyloaded components or dynamically updated parents.
