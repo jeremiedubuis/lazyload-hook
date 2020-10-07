@@ -36,6 +36,10 @@ export const onIntersect = (
     _callback: Function,
     options: intersectionObserverOptions
 ) => {
+    if (typeof IntersectionObserver === 'undefined' || !IntersectionObserver)  {
+        _callback();
+        return () => {};
+    }
     const io = getIntersectionObserver(options);
     let callback;
 
