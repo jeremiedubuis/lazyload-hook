@@ -2,8 +2,8 @@ import type { intersectionObserverOptions } from './useLazyLoad';
 
 const ios = [];
 
-function fireCallbacks(entries: IntersectionObserverEntry[]) {
-    const io = ios.find(({ instance }) => instance === this);
+function fireCallbacks(entries: IntersectionObserverEntry[], _id: number) {
+    const io = ios.find(({ id }) => id === _id);
     io.callbacks
         .filter(({ el }) => entries.find((e) => e.target === el && e.isIntersecting))
         .forEach(({ callback }) => callback());
@@ -18,10 +18,12 @@ const getIntersectionObserver = (_options: intersectionObserverOptions = {}) => 
                 _options.root === options.root)
     );
     if (!io) {
+        const id = ios.length;
         io =
             ios[
                 ios.push({
-                    instance: new IntersectionObserver(fireCallbacks, _options),
+                    id,
+                    instance: new IntersectionObserver(entries => fireCallbacks(entries, id), _options),
                     options: _options,
                     callbacks: []
                 }) - 1
