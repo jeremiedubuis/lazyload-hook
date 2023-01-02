@@ -9,8 +9,11 @@ export type intersectionObserverOptions = {
 
 export const useLazyLoad = (
     intersectionObserverConfig?: intersectionObserverOptions,
-    onLazyLoad?: Function
-): [RefObject<any>, boolean] => {
+    onLazyLoad?: Function,
+    ignore?: boolean
+): [RefObject<any> | null, boolean] => {
+    if (ignore) return [null, true];
+
     const ref = useRef<any>();
     const [swappedSources, setSwappedSources] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
